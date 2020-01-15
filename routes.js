@@ -6,13 +6,21 @@ const requestHandler = (req, res) => {
 
     if (url === '/') {
         res.write('<html>');
-        res.write('<head><title>Enter message</title></head>');
-        res.write('<body><form action="/message" method="POST"><input type="text" name="message"><button type="submit">press</button></form></body>');
+        res.write('<head><title>MainPage</title></head>');
+        res.write('<body><form action="/create-user" method="POST"><input type="text" name="username"><button type="submit">New user</button></form></body>');
         res.write('</html>');
         return res.end();
     }
 
-    if (url === '/message' && method === 'POST') {
+    if (url === '/users') {
+        res.write('<html>');
+        res.write('<head><title>Users</title></head>');
+        res.write('<body><ul><li>User</li><li>User</li><li>User</li></ul></body>');
+        res.write('</html>');
+        return res.end();
+    }
+
+    if (url === '/create-user' && method === 'POST') {
         const body = [];
         req.on('data', (chunk) => {
             console.log('CHUNK', chunk);
@@ -21,8 +29,8 @@ const requestHandler = (req, res) => {
         return req.on('end', () => {
             const parsedBody = Buffer.concat(body).toString();
             console.log('BODY', parsedBody);
-            const message = parsedBody.split('=')[1];
-            fs.writeFile('message.txt', message, err => {
+            const userName = parsedBody.split('=')[1];
+            fs.writeFile('user.txt', userName, err => {
                 res.statusCode = 302;
                 res.setHeader('Location', '/');
                 return res.end();
